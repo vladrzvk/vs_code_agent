@@ -1,6 +1,7 @@
 export class ChatUI {
     static getWebviewContent(): string {
-        return `<!DOCTYPE html>
+        return /*html*/`
+        <!DOCTYPE html>
         <html lang="en">
         <head>
             <meta charset="UTF-8">
@@ -24,26 +25,53 @@ export class ChatUI {
                 }
                 .user { background-color: #0078d7; color: white; align-self: flex-end; }
                 .ai { background-color: #eee; color: black; align-self: flex-start; }
-                input { width: 100%; padding: 10px; margin-top: 10px; }
+                #input-container {
+                    display: flex;
+                    margin-top: 10px;
+                }
+                input {
+                    flex: 1;
+                    padding: 10px;
+                }
+                button {
+                    padding: 10px;
+                    background-color: #0078d7;
+                    color: white;
+                    border: none;
+                    cursor: pointer;
+                }
+                button:hover {
+                    background-color: #005a9e;
+                }
             </style>
         </head>
         <body>
             <h2>Chat AI</h2>
             <div id="chat-container"></div>
-            <input type="text" id="input" placeholder="Type a message..." />
+            <div id="input-container">
+                <input type="text" id="input" placeholder="Type a message..." />
+                <button id="ask-button">Ask</button>
+            </div>
 
             <script>
                 const vscode = acquireVsCodeApi();
 
+                document.getElementById('ask-button').addEventListener('click', sendMessage);
                 document.getElementById('input').addEventListener('keydown', function(event) {
                     if (event.key === 'Enter') {
-                        const message = this.value.trim();
-                        if (!message) return;
-                        this.value = '';
-                        addMessage('You', message, 'user');
-                        vscode.postMessage({ text: message });
+                        sendMessage();
                     }
                 });
+
+                function sendMessage() {
+                    const inputField = document.getElementById('input');
+                    const message = inputField.value.trim();
+                    if (!message) return;
+
+                    inputField.value = '';
+                    addMessage('You', message, 'user');
+                    vscode.postMessage({ text: message });
+                }
 
                 function addMessage(user, text, type) {
                     const container = document.getElementById('chat-container');

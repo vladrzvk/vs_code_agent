@@ -3,7 +3,6 @@ import { AgentProcessor } from './AgentProcessor';
 import { UserInputHandler } from './UserInputHandler';
 import { ChatUI } from './ChatUI';
 
-
 export class ChatController {
     private panel: vscode.WebviewPanel | null = null;
     private agentProcessor: AgentProcessor;
@@ -12,7 +11,8 @@ export class ChatController {
     constructor(context: vscode.ExtensionContext) {
         this.agentProcessor = new AgentProcessor();
         this.userInputHandler = new UserInputHandler();
-        
+
+        // Enregistre la commande pour ouvrir le chat
         let disposable = vscode.commands.registerCommand('agent.openChat', () => {
             this.createWebviewPanel(context);
         });
@@ -35,7 +35,7 @@ export class ChatController {
 
         this.panel.webview.html = ChatUI.getWebviewContent();
         this.setupMessageListener();
-        
+
         this.panel.onDidDispose(() => {
             this.panel = null;
         }, null, context.subscriptions);
@@ -44,9 +44,16 @@ export class ChatController {
     private setupMessageListener() {
         this.panel?.webview.onDidReceiveMessage(
             async (message) => {
+                console.log(`Message reçu depuis la WebView: ${message.text}`);
+
+                // Vérifie si c'est une commande ou un message normal
                 const processedInput = this.userInputHandler.processInput(message.text);
-                // const response = await this.agentProcessor.getResponse(processedInput);
+
+                // Simulation de la réponse sans API externe (Mode test)
                 const response = await this.agentProcessor.getMockResponse(processedInput);
+
+                console.log(`Réponse de l'AgentProcessor: ${response}`);
+
                 this.panel?.webview.postMessage({ text: response });
             },
             undefined
