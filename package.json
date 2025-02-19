@@ -3,6 +3,14 @@
   "displayName": "my_agent",
   "description": "my_vs_code_agent",
   "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vlad/my-agent.git"
+  },
+  "bugs": {
+    "url": "https://github.com/vlad/my-agent/issues"
+  },
+  "homepage": "https://github.com/vlad/my-agent#readme",
   "engines": {
     "vscode": "^1.97.0"
   },
