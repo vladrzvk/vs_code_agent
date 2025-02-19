@@ -1,4 +1,8 @@
-# My VS CODE agent README
+# My VS Code AI Chat Extension
+
+This is a local AI-powered chat assistant for VS Code.
+
+# README
 
 This is the README for your extension " My VS CODE ". After writing up a brief description, we recommend including the following sections.
 
